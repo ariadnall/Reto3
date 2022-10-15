@@ -18,18 +18,17 @@ public class Reservation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idReservation;
-
     private Timestamp startDate;
     private Timestamp devolutionDate;
     private String status = "created";
 
     @ManyToOne
-    @JoinColumn(name = "auditorioId")
+    @JoinColumn(name = "audience")
     @JsonIgnoreProperties("reservations")
     private Audience audience;
 
     @ManyToOne
-    @JoinColumn(name = "clientId")
+    @JoinColumn(name = "client")
     @JsonIgnoreProperties({"reservations", "messages"})
     private Client client;
 

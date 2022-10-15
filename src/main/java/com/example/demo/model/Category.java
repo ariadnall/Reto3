@@ -19,7 +19,7 @@ public class Category implements Serializable {
     private String description;
 
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "category")
-    @JsonIgnoreProperties({ "messages","reservations"})
+    @JsonIgnoreProperties({"category"})
     public List<Audience> audiences;
 
     public Integer getId() {

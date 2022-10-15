@@ -19,23 +19,23 @@ public class Audience implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
     private String owner;
     private Integer capacity;
-    private String name;
-
     private String description;
 
+
+
+    @ManyToOne
+    @JoinColumn(name = "Category")
+    @JsonIgnoreProperties({"audiences"})
+    public Category category;
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy= "audience")
     @JsonIgnoreProperties({"audience", "client"})
     public List<Messages> messages;
 
-    @ManyToOne
-    @JoinColumn(name = "idCategory")
-    @JsonIgnoreProperties({"audience","client"})
-    public Category category;
-
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "audience")
-    @JsonIgnoreProperties({"audience", "client"})
+    @JsonIgnoreProperties({"audience"})
     private List<Reservation> reservations;
 
     public Integer getId() {
@@ -44,6 +44,14 @@ public class Audience implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOwner() {
@@ -62,14 +70,6 @@ public class Audience implements Serializable {
         this.capacity = capacity;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -78,20 +78,20 @@ public class Audience implements Serializable {
         this.description = description;
     }
 
-    public List<Messages> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Messages> messages) {
-        this.messages = messages;
-    }
-
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Messages> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Messages> messages) {
+        this.messages = messages;
     }
 
     public List<Reservation> getReservations() {
