@@ -18,17 +18,16 @@ public class ReservationRepository {
     public List<Reservation> getAll(){
         return (List<Reservation>) reservationCrudRepository.findAll();
     }
+    public Optional<Reservation> getReservation(int id) {
+        return reservationCrudRepository.findById(id);
+    }
     public Reservation save(Reservation reservation){
         return reservationCrudRepository.save(reservation);
     }
-    public Optional<Reservation> getClient(int id){
-        return reservationCrudRepository.findById(id);
-    }
+
     public void delete(Reservation reservation){
         reservationCrudRepository.delete(reservation);
     }
 
-    public Optional<Reservation> getReservation(int id) {
-        return reservationCrudRepository.findById(id);
-    }
+
 }

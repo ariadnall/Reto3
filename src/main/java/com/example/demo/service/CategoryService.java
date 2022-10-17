@@ -25,7 +25,7 @@ public class CategoryService {
             return categoryRepository.save(category);
         }else{
             Optional<Category> opt = categoryRepository.getCategory(category.getId());
-            if(opt.isPresent()){
+            if(opt.isEmpty()){
                 return category;
             }else{
                 return categoryRepository.save(category);
@@ -35,7 +35,7 @@ public class CategoryService {
     public Category update (Category category){
         if (category.getId()!=null){
             Optional<Category> q = categoryRepository.getCategory(category.getId());
-            if (q.isPresent()){
+            if (!q.isEmpty()){
                 if(category.getName()!=null){
                     q.get().setName(category.getName());
                 }
@@ -53,12 +53,10 @@ public class CategoryService {
     }
 
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Category>category= categoryRepository.getCategory(id);
-        if(category.isPresent()){
-            categoryRepository.delete(category.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getCategory(id).map(category -> {
+            categoryRepository.delete(category);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 }

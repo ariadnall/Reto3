@@ -17,17 +17,16 @@ public class MessagesRepository {
     public List<Messages> getAll(){
         return (List<Messages>) messagesCrudRepository.findAll();
     }
+    public Optional<Messages> getMessage(int id) {
+        return messagesCrudRepository.findById(id);
+    }
     public Messages save(Messages messages){
         return messagesCrudRepository.save(messages);
     }
-    public Optional<Messages> getClient(int id){
-        return messagesCrudRepository.findById(id);
-    }
+
     public void delete(Messages messages){
         messagesCrudRepository.delete(messages);
     }
 
-    public Optional<Messages> getMessage(int id) {
-        return messagesCrudRepository.findById(id);
-    }
+
 }

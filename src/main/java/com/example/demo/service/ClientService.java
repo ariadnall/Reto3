@@ -35,7 +35,7 @@ public class ClientService {
     public Client update (Client client){
         if (client.getIdClient()!=null){
             Optional<Client> opt1 = clientRepository.getClient(client.getIdClient());
-            if (opt1.isPresent()){
+            if (!opt1.isEmpty()){
                 if(client.getEmail()!=null){
                     opt1.get().setEmail(client.getEmail());
                 }
@@ -60,12 +60,10 @@ public class ClientService {
         }
     }
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Client>client= clientRepository.getClient(id);
-        if(client.isPresent()){
-            clientRepository.delete(client.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getClient(id).map(client -> {
+            clientRepository.delete(client);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 }

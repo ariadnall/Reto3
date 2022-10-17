@@ -34,7 +34,7 @@ public class AudienceService {
     public Audience update(Audience audience){
         if (audience.getId()!= null){
             Optional<Audience> opt1 = audienceRepository.getAudience((audience.getId()));
-            if (opt1.isPresent()){
+            if (!opt1.isEmpty()){
                 if (audience.getOwner() != null){
                     opt1.get().setOwner(audience.getOwner());
                 }
@@ -58,12 +58,10 @@ public class AudienceService {
         }
     }
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Audience>audience = audienceRepository.getAudience(id);
-        if (audience.isPresent()){
-            audienceRepository.delete(audience.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getAudience(id).map(audience -> {
+            audienceRepository.delete(audience);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 }

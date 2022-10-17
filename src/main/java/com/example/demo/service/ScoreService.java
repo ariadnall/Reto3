@@ -35,7 +35,7 @@ public class ScoreService {
     public Score update (Score score){
         if (score.getIdScore()!=null){
             Optional<Score> q = scoreRepository.getScore(score.getIdScore());
-            if (q.isPresent()){
+            if (!q.isEmpty()){
                 if(score.getMessageText()!=null){
                     q.get().setMessageText(score.getMessageText());
                 }
@@ -52,12 +52,10 @@ public class ScoreService {
         }
     }
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Score>score= scoreRepository.getScore(id);
-        if(score.isPresent()){
-            scoreRepository.delete(score.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getScore(id).map(score -> {
+            scoreRepository.delete(score);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 }

@@ -35,7 +35,7 @@ public class ReservationService {
     public Reservation update (Reservation reservation){
         if (reservation.getIdReservation()!=null){
             Optional<Reservation> q = reservationRepository.getReservation(reservation.getIdReservation());
-            if (q.isPresent()){
+            if (!q.isEmpty()){
                 if(reservation.getStartDate()!=null){
                     q.get().setStartDate(reservation.getStartDate());
                 }
@@ -56,12 +56,10 @@ public class ReservationService {
         }
     }
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Reservation>reservation= reservationRepository.getReservation(id);
-        if(reservation.isPresent()){
-            reservationRepository.delete(reservation.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getReservation(id).map(reservation -> {
+            reservationRepository.delete(reservation);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 }

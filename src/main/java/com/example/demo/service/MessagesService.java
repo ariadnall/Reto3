@@ -24,7 +24,7 @@ public class MessagesService {
             return messageRepository.save(message);
         }else{
             Optional<Messages> e = messageRepository.getMessage(message.getIdMessage());
-            if(e.isPresent()){
+            if(e.isEmpty()){
                 return message;
             }else{
                 return messageRepository.save(message);
@@ -34,7 +34,7 @@ public class MessagesService {
     public Messages update (Messages messages){
         if (messages.getIdMessage()!=null){
             Optional<Messages> q = messageRepository.getMessage(messages.getIdMessage());
-            if (q.isPresent()){
+            if (!q.isEmpty()){
                 if(messages.getMessageText()!=null){
                     q.get().setMessageText(messages.getMessageText());
                 }
@@ -49,13 +49,11 @@ public class MessagesService {
     }
 
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Messages>message=messageRepository.getMessage(id);
-        if(message.isPresent()){
-            messageRepository.delete(message.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getMessage(id).map(message -> {
+            messageRepository.delete(message);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 
 }

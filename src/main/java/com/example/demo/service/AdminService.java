@@ -34,7 +34,7 @@ public class AdminService {
     public Admin update(Admin admin){
         if (admin.getIdAdmin()!= null){
             Optional<Admin> opt1 = adminRepository.getAdmin((admin.getIdAdmin()));
-            if (opt1.isPresent()){
+            if (!opt1.isEmpty()){
                 if (admin.getName() != null){
                     opt1.get().setName(admin.getName());
                 }
@@ -43,24 +43,25 @@ public class AdminService {
                 }
                 if (admin.getPassword() != null){
                     opt1.get().setPassword(admin.getPassword());
-                    adminRepository.save(opt1.get());
-                    return opt1.get();
-                }else {
-                    return admin;
+
                 }
-            } else {
+                adminRepository.save(opt1.get());
+                return opt1.get();
+
+            }else {
                 return admin;
             }
+        } else {
+            return admin;
         }
-        return admin;
     }
+
+
     public boolean delete(int id){
-        boolean flag=false;
-        Optional<Admin>admin = adminRepository.getAdmin(id);
-        if (admin.isPresent()){
-            adminRepository.delete(admin.get());
-            flag=true;
-        }
-        return flag;
+        Boolean respuesta = getAdmin(id).map(admin -> {
+            adminRepository.delete(admin);
+            return true;
+        }).orElse(false);
+        return respuesta;
     }
 }
