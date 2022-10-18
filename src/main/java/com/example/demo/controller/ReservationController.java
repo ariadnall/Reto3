@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.CountClient;
 import com.example.demo.model.Reservation;
+import com.example.demo.model.StatusAccount;
 import com.example.demo.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,5 +42,18 @@ public class ReservationController {
         return reservationService.delete(id);
     }
 
+    @GetMapping("/report-dates/{dateOne}/{dateTwo}")
+    public List<Reservation> getByDates(@PathVariable("dateOne") String dateOne, @PathVariable("dateTwo") String dateTwo){
+        return reservationService.getReservationByDates(dateOne, dateTwo);
+    }
 
+    @GetMapping("/report-status")
+    public StatusAccount getbystatus(){
+        return reservationService.getReportByStatus();
+    }
+
+    @GetMapping("/report-clients")
+    public List<CountClient> getReservationByClients(){
+        return reservationService.countTotalReservationsByClient();
+    }
 }

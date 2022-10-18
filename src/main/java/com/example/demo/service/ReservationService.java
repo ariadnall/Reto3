@@ -1,10 +1,15 @@
 package com.example.demo.service;
+import com.example.demo.model.CountClient;
 import com.example.demo.model.Reservation;
+import com.example.demo.model.StatusAccount;
 import com.example.demo.repository.ReservationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,4 +67,31 @@ public class ReservationService {
         }).orElse(false);
         return respuesta;
     }
+    public List<Reservation> getReservationByDates(String dateOne, String dateTwo){
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+        Date a= new Date();
+        Date b= new Date();
+        try{
+            a = parser.parse(dateOne);
+            b = parser.parse(dateTwo);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (a.before(b)){
+            return reservationRepository.getDatesReport(a, b);
+        }else {
+            return new ArrayList<>();
+        }
+    }
+    public StatusAccount getReportByStatus() {
+        List<Reservation> completed = reservationRepository.getStatusReport("completed");
+        List<Reservation> cancelled = reservationRepository.getStatusReport("cancelled");
+
+        return new StatusAccount(completed.size(), cancelled.size());
+    }
+    public List<CountClient> countTotalReservationsByClient(){
+        return reservationRepository.countTotalReservationsByClient();
+    }
+
+
 }
